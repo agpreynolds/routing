@@ -3,12 +3,13 @@ $(function() {
 	var context = canvas.getContext('2d');
 
 	/*
+		@param id - String
 		@param coords - Object {
 			x : integer,
 			y : integer
 		}
 	*/
-	var node = function(coords) {
+	var node = function(id,coords) {
 		this.coords = coords;
 		this.marker = new circle(coords,5);
 		this.arcs = [];
@@ -302,10 +303,10 @@ $(function() {
 	];
 	
 	var nodes = {
-		A : new node({x:5,y:5}),
-		B : new node({x:120,y:300}),
-		C : new node({x:300,y:120}),
-		D : new node({x:490,y:490})
+		A : new node('A',{x:5,y:5}),
+		B : new node('B',{x:120,y:300}),
+		C : new node('C',{x:300,y:120}),
+		D : new node('D',{x:490,y:490})
 	};
 
 	var arcs = [
