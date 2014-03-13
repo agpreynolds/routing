@@ -1,6 +1,30 @@
+var geo = {};
 $(function() {
-	var canvas = $('#mycanvas')[0];
-	var context = canvas.getContext('2d');
+
+	geo.init = function() {
+		geo.canvas = $('#mycanvas')[0];
+		geo.context = geo.canvas.getContext('2d');
+
+		geo.hazards = [
+			new geo.hazard('Rain',{x:100,y:100},100,2,2,0.2),
+			new geo.hazard('Desert',{x:300,y:240},50,3,5,0.5),
+			new geo.hazard('Forest',{x:100,y:300},50,1,5,0.5)
+		];
+		
+		geo.nodes = {
+			A : new geo.node('A',{x:5,y:5}),
+			B : new geo.node('B',{x:120,y:300}),
+			C : new geo.node('C',{x:300,y:120}),
+			D : new geo.node('D',{x:490,y:490})
+		};
+
+		geo.arcs = [
+			new geo.arc(geo.nodes.A,geo.nodes.B),
+			new geo.arc(geo.nodes.B,geo.nodes.C),
+			new geo.arc(geo.nodes.A,geo.nodes.C),
+			new geo.arc(geo.nodes.C,geo.nodes.D)
+		];
+	};
 
 	/*
 		@param id - String
@@ -9,13 +33,13 @@ $(function() {
 			y : integer
 		}
 	*/
-	var node = function(id,coords) {
+	geo.node = function(id,coords) {
 		this.coords = coords;
-		this.marker = new circle(coords,5);
+		this.marker = new geo.circle(coords,5);
 		this.arcs = [];
 		this.successors = [];
 		this.predecessors = [];
-	}
+	};
 	
 	/*
 		@param start - Object {
@@ -28,12 +52,12 @@ $(function() {
 		}
 		@return InstanceOf Object (line)
 	*/
-	var arc = function(start,end) {
-		var self = new line(start.coords,end.coords);
+	geo.arc = function(start,end) {
+		var self = new geo.line(start.coords,end.coords);
 		self.getHazards = function() {
 			var path = this;
 			//Foreach hazard - check if this path intersects
-			$(hazards).each(function(){
+			$(geo.hazards).each(function(){
 				var intersection = this.circle.checkIntersection(path);
 
 				//If we have found an intersection add hazard to path hazards array
@@ -47,7 +71,7 @@ $(function() {
 		self.calculateHazards = function() {
 			var path = this;
 			$(this.hazards).each(function(){
-				var intersect = new intersection(this.intersection.start,this.intersection.end);
+				var intersect = new geo.intersection(this.intersection.start,this.intersection.end);
 				//If more than 1 increment things get tricky
 				if (this.hazard.increments > 1) {
 					var totalInnerDistance = 0;
@@ -55,7 +79,7 @@ $(function() {
 						var innerIntersect;
 						if ( innerIntersect = this.checkIntersection(path) ) {
 							//Get the intersect for this segment
-							innerIntersect = new intersection(innerIntersect.start,innerIntersect.end);
+							innerIntersect = new geo.intersection(innerIntersect.start,innerIntersect.end);
 							
 							//The distance of the entire segment
 							var innerDistance = innerIntersect.line.distance;
@@ -83,7 +107,7 @@ $(function() {
 		self.getHazards();
 		self.draw();
 		return self;
-	}
+	};
 
 	/*
 		@param start - Object {
@@ -95,7 +119,7 @@ $(function() {
 			y : integer
 		}
 	*/
-	var line = function(start,end) {
+	geo.line = function(start,end) {
 		this.hazards = [];
 		this.start = start;
 		this.end = end;
@@ -115,11 +139,11 @@ $(function() {
 				Canvas place (0,0) at top left whereas mathematics places it bottom left
 				Convert the canvas output to start at bottom left
 			*/
-			context.moveTo(start.x,canvas.height - start.y);
-			context.lineTo(end.x,canvas.height - end.y);
-			context.stroke();
+			geo.context.moveTo(start.x,geo.canvas.height - start.y);
+			geo.context.lineTo(end.x,geo.canvas.height - end.y);
+			geo.context.stroke();
 		}		
-	}
+	};
 
 	/*
 		@param id - String
@@ -132,23 +156,23 @@ $(function() {
 		@param weighting - Numeric / Integer / Float
 			!!Should be larger than 1 if truly a hazard!!
 	*/
-	var hazard = function(id,center,radius,increments,weighting,degradation) {
+	geo.hazard = function(id,center,radius,increments,weighting,degradation) {
 		this.id = id;
 		this.weighting = weighting;
 		this.increments = increments;
 		//Get a reference to outer ring
 		//TODO: Reconsider whether this is necessary
-		this.circle = new circle(center,radius);
+		this.circle = new geo.circle(center,radius);
 		this.segments = [];
 		
 		var weighting = this.weighting;
 		//So loop through each increment
 		//Create zones - smallest radius first - largest weighting first
 		for (var i=1; i<=increments; i++) {
-			this.segments.push(new zone(center,radius/increments*i,weighting));
+			this.segments.push(new geo.zone(center,radius/increments*i,weighting));
 			weighting = weighting * degradation;
 		}
-	}
+	};
 
 	/*
 		@param center - Object {
@@ -158,11 +182,11 @@ $(function() {
 		@param radius - Numeric / Integer / Float
 		@param weighting - Numeric / Integer / Float
 	*/
-	var zone = function(center,radius,weighting) {
-		self = new circle(center,radius);
+	geo.zone = function(center,radius,weighting) {
+		self = new geo.circle(center,radius);
 		self.weighting = weighting;
 		return self;
-	}
+	};
 
 	/*
 		@param center - Object {
@@ -171,7 +195,7 @@ $(function() {
 		}
 		@param radius - Numeric / Integer / Float
 	*/
-	var circle = function(center,radius,fillColor) {
+	geo.circle = function(center,radius,fillColor) {
 		this.center = center;
 		this.radius = radius;
 		this.checkIntersection = function(path) {
@@ -264,19 +288,19 @@ $(function() {
 			return 0;
 		}
 		this.draw = function() {
-			context.beginPath();
-			context.arc(center.x,canvas.height - center.y,radius,0,2*Math.PI);
+			geo.context.beginPath();
+			geo.context.arc(center.x,geo.canvas.height - center.y,radius,0,2*Math.PI);
 			
 			if (fillColor) {
-				context.fillStyle = fillColor;
-				context.fill();				
+				geo.context.fillStyle = fillColor;
+				geo.context.fill();				
 			}
 			else {
-				context.stroke();
+				geo.context.stroke();
 			}
 		}
 		this.draw();
-	}
+	};
 
 	/*
 		@param start - Object {
@@ -288,38 +312,19 @@ $(function() {
 			y : integer
 		}
 	*/
-	var intersection = function(start,end) {		
-		this.line = new line(start,end);
+	geo.intersection = function(start,end) {		
+		this.line = new geo.line(start,end);
 		this.showMarkers = function() {
-			new circle(start,5,'#cc0000'),
-			new circle(end,5,'#cc0000')
+			new geo.circle(start,5,'#cc0000'),
+			new geo.circle(end,5,'#cc0000')
 		}
 		
 		this.showMarkers();
-	}
-
-	var hazards = [
-		new hazard('Rain',{x:100,y:100},100,2,2,0.2),
-		new hazard('Desert',{x:300,y:240},50,3,5,0.5),
-		new hazard('Forest',{x:100,y:300},50,1,5,0.5)
-	];
-	
-	var nodes = {
-		A : new node('A',{x:5,y:5}),
-		B : new node('B',{x:120,y:300}),
-		C : new node('C',{x:300,y:120}),
-		D : new node('D',{x:490,y:490})
 	};
 
-	var arcs = [
-		new arc(nodes.A,nodes.B),
-		new arc(nodes.B,nodes.C),
-		new arc(nodes.A,nodes.C),
-		new arc(nodes.C,nodes.D)
-	];
+	geo.init();
 
-	console.log(nodes);
-	console.log(hazards);
+	console.log(geo);
 });
 
 var between = function(test,lowBound,highBound) {
