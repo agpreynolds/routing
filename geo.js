@@ -3,31 +3,17 @@ $(function() {
 	var context = canvas.getContext('2d');
 
 	/*
-		@param id - String
 		@param coords - Object {
 			x : integer,
 			y : integer
 		}
 	*/
-	var node = function(id,coords) {
-		this.id = id;
+	var node = function(coords) {
 		this.coords = coords;
 		this.marker = new circle(coords,5);
 		this.arcs = [];
 		this.successors = [];
 		this.predecessors = [];
-		this.getLines = function() {
-			var currentNode = this;
-			$(nodes).each(function(){
-				//Need to stop lines being redrawn in opposite direction
-				//TODO: Make logic more readable
-				if (this != currentNode && $.inArray(this,currentNode.predecessors) == -1 && $.inArray(currentNode,this.successors) == -1 ) {
-					currentNode.arcs.push( new arc(currentNode.coords,this.coords) );
-					currentNode.successors.push(this);
-					this.predecessors.push(currentNode);
-				}
-			});
-		}
 	}
 	
 	/*
@@ -315,16 +301,19 @@ $(function() {
 		new hazard('Forest',{x:100,y:300},50,1,5,0.5)
 	];
 	
-	var nodes = [
-		new node('A',{x:5,y:5}),
-		new node('B',{x:120,y:300}),
-		new node('C',{x:300,y:120}),
-		new node('D',{x:490,y:490})
-	];
+	var nodes = {
+		A : new node({x:5,y:5}),
+		B : new node({x:120,y:300}),
+		C : new node({x:300,y:120}),
+		D : new node({x:490,y:490})
+	};
 
-	$(nodes).each(function(){
-		this.getLines();
-	});
+	var arcs = [
+		new arc(nodes.A.coords,nodes.B.coords),
+		new arc(nodes.B.coords,nodes.C.coords),
+		new arc(nodes.A.coords,nodes.C.coords),
+		new arc(nodes.C.coords,nodes.D.coords)
+	];
 
 	console.log(nodes);
 	console.log(hazards);
