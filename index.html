@@ -15,6 +15,8 @@
 		<header>Create New Node</header>
 		<form name="node">
 			<ul id="errors"></ul>
+			
+			<label for="id">Unique ID</label>
 			<input name="id" type="text"/>
 			{{#each .}}
 				{{id}}
@@ -23,6 +25,20 @@
 		</form>
 	</script>
 	<script id="hazardTemplate" type="text/x-handlebars-template">
+		<header>Create New Hazard</header>
+		<form name="hazard">
+			<ul id="errors"></ul>
+
+			<label for="id">Unique ID</label>
+			<input name="id" type="text"/>
+
+			<label for="radius">Radius</label>
+			<input name="radius" type="number"/>
+			<input name="increments" type="number"/>
+			<input name="degradation" type="number"/>
+			
+			<input type="submit" value="Add Hazard"/>
+		</form>
 	</script>
 </head>
 <body>

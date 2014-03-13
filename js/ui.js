@@ -4,7 +4,7 @@ $(function(){
     
     $('#node').bind('click',function(){
         $('#mycanvas').unbind('click').bind('click',function(e){
-            coords = relMouseCoords(this,e);
+            var coords = relMouseCoords(this,e);
             
             overlay.init({
                 id : 'nodeOverlay',
@@ -20,14 +20,36 @@ $(function(){
                         else {
                             $('#errors').append($('<li>').addClass('error').html('Please enter a unique ID'));
                         }
-
                     });
                 }
             });
-		})
+		});
 	});
 	$('#hazard').bind('click',function(){
-		alert('hazard');
+		$('#mycanvas').unbind('click').bind('click',function(e){
+            var coords = relMouseCoords(this,e);
+
+            overlay.init({
+                id : 'hazardOverlay',
+                content : hazardTemplate(),
+                callback : function(container) {
+                    $('form[name="hazard"]').bind('submit',function(e){
+                        e.preventDefault();
+                        var id = $(this.elements.id).val();
+                        var radius = $(this.elements.radius).val();
+                        var increments = $(this.elements.increments).val();
+                        var degradation = $(this.elements.degradation).val();
+                        if (id && !geo.hazards[id]) {
+                            geo.hazards[id] = new geo.hazard(id,coords,radius,increments,degradation);
+                            container.remove();
+                        }
+                        else {
+                            $('#errors').append($('<li>').addClass('error').html('Please enter a unique ID'));
+                        }
+                    });
+                }
+            });
+        });
 	});
 });
 
