@@ -1,8 +1,16 @@
 $(function(){
-	$('#node').bind('click',function(){
-		$('#mycanvas').unbind('click').bind('click',function(e){
-			coords = relMouseCoords(this,e);
-			geo.nodes.E = new geo.node('E',coords);
+    var nodeTemplate = Handlebars.compile($('#nodeTemplate').html());
+    var hazardTemplate = Handlebars.compile($('#hazardTemplate').html());
+    
+    $('#node').bind('click',function(){
+        $('#mycanvas').unbind('click').bind('click',function(e){
+            coords = relMouseCoords(this,e);
+            overlay.init({
+                id : 'nodeOverlay',
+                content : nodeTemplate(geo.nodes)
+            });
+            
+			// geo.nodes.E = new geo.node('E',coords);
 		})
 	});
 	$('#hazard').bind('click',function(){
