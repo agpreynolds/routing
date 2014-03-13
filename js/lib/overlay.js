@@ -66,6 +66,10 @@ var overlay = overlay || {
         else if (content) {
             contentContainer.html(content);
             align();
+
+            if (callback) {
+                callback(container);
+            }
         }        
     }                
 }

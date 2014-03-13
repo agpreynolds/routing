@@ -5,12 +5,25 @@ $(function(){
     $('#node').bind('click',function(){
         $('#mycanvas').unbind('click').bind('click',function(e){
             coords = relMouseCoords(this,e);
+            
             overlay.init({
                 id : 'nodeOverlay',
-                content : nodeTemplate(geo.nodes)
+                content : nodeTemplate(geo.nodes),
+                callback : function(container) {
+                    $('form[name="node"]').bind('submit',function(e){
+                        e.preventDefault();
+                        var id = $(this.elements.id).val();
+                        if (id && !geo.nodes[id]) {
+                            geo.nodes[id] = new geo.node(id,coords);
+                            container.remove();
+                        }
+                        else {
+                            $('#errors').append($('<li>').addClass('error').html('Please enter a unique ID'));
+                        }
+
+                    });
+                }
             });
-            
-			// geo.nodes.E = new geo.node('E',coords);
 		})
 	});
 	$('#hazard').bind('click',function(){
