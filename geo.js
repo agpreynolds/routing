@@ -28,7 +28,7 @@ $(function() {
 		@return InstanceOf Object (line)
 	*/
 	var arc = function(start,end) {
-		var self = new line(start,end);
+		var self = new line(start.coords,end.coords);
 		self.getHazards = function() {
 			var path = this;
 			//Foreach hazard - check if this path intersects
@@ -309,10 +309,10 @@ $(function() {
 	};
 
 	var arcs = [
-		new arc(nodes.A.coords,nodes.B.coords),
-		new arc(nodes.B.coords,nodes.C.coords),
-		new arc(nodes.A.coords,nodes.C.coords),
-		new arc(nodes.C.coords,nodes.D.coords)
+		new arc(nodes.A,nodes.B),
+		new arc(nodes.B,nodes.C),
+		new arc(nodes.A,nodes.C),
+		new arc(nodes.C,nodes.D)
 	];
 
 	console.log(nodes);
@@ -320,7 +320,8 @@ $(function() {
 });
 
 var between = function(test,lowBound,highBound) {
-	if (test > lowBound && test < highBound) {
+	//Check both ways incase lowBound is higher than high bound
+	if ( (test > lowBound && test < highBound) || (test < lowBound && test > highBound ) ) {
 		return 1;
 	}
 	return 0;
