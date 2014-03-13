@@ -34,6 +34,7 @@ $(function() {
 		}
 	*/
 	geo.node = function(id,coords) {
+		this.id = id;
 		this.coords = coords;
 		this.marker = new geo.circle(coords,5);
 		this.arcs = [];
