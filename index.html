@@ -2,10 +2,25 @@
 <html>
 <head>
 	<title>Webres Routing Demonstration</title>
-	<link rel="stylesheet" type="text/css" href="style.css">
-	<script src="jQuery.js"></script>
-	<script type="text/javascript" src="geo.js"></script>
-	<script type="text/javascript" src="ui.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<link rel="stylesheet" type="text/css" href="css/lib/overlay.css">
+	<script type="text/javascript" src="js/lib/jQuery.js"></script>
+	<script type="text/javascript" src="js/lib/jQuery_ext.js"></script>
+	<script type="text/javascript" src="js/lib/handlebars.js"></script>
+	<script type="text/javascript" src="js/lib/overlay.js"></script>
+	<script type="text/javascript" src="js/geo.js"></script>
+	<script type="text/javascript" src="js/ui.js"></script>
+
+	<script id="nodeTemplate" type="text/x-handlebars-template">
+		<form name="node">
+			<input name="id" type="text"/>
+			{{#each node}}
+				{{id}}
+			{{/each}}
+		</form>
+	</script>
+	<script id="hazardTemplate" type="text/x-handlebars-template">
+	</script>
 </head>
 <body>
 	<header>Webres Routing Demonstration</header>
