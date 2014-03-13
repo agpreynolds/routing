@@ -237,20 +237,22 @@ $(function() {
 				//Hmm have to do something incase the path starts / terminates within hazard
 				//TODO: Refine code
 				var start,end;
-				if ( between(x1,path.start.x,path.end.x) && between(y1,path.start.y,path.end.y) ) {
+				//If point is on the line - use the point
+				if ( between(x1,path.start.x,path.end.x) ) {
 					start = {x:x1,y:y1};
 				}
-				else if ( path.gradient > 0 ) {
+				//Otherwise - if x coord is less than starting coord and gradient is positive use start coord
+				else if ( x1 < path.start.x && path.gradient > 0 ) {
 					start = {x:path.start.x,y:path.start.y};
 				}
 				else {
 					start = {x:path.end.x,y:path.end.y};
 				}
 
-				if ( between(x2,path.start.x,path.end.x) && between(y2,path.start.y,path.end.y) ) {
+				if ( between(x2,path.start.x,path.end.x) ) {
 					end = {x:x2,y:y2};
 				}
-				else if ( path.gradient > 0 ) {
+				else if ( x2 > path.end.x && path.gradient > 0 ) {
 					end = {x:path.end.x,y:path.end.y};
 				}
 				else {
