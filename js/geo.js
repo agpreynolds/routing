@@ -105,6 +105,8 @@ $(function() {
 			//Minus the distance as the unweighted version has already been applied
 			this.distance += ( distance * weighting ) - distance;
 		}
+		self.startNode = start;
+		self.endNode = end;
 		self.getHazards();
 		self.draw();
 		return self;

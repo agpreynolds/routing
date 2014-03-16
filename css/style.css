@@ -12,6 +12,8 @@ footer {
 	font-size: 80%;
 }
 
+input,select {display:block;}
+
 a:hover {
 	text-decoration:underline;
 	cursor:pointer;

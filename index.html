@@ -4,10 +4,12 @@
 	<title>Webres Routing Demonstration</title>
 	<link rel="stylesheet" type="text/css" href="css/style.css">
 	<link rel="stylesheet" type="text/css" href="css/lib/overlay.css">
+	<link rel="stylesheet" type="text/css" href="js/lib/select2/select2.css">
 	<script type="text/javascript" src="js/lib/jQuery.js"></script>
 	<script type="text/javascript" src="js/lib/jQuery_ext.js"></script>
 	<script type="text/javascript" src="js/lib/handlebars.js"></script>
 	<script type="text/javascript" src="js/lib/overlay.js"></script>
+	<script type="text/javascript" src="js/lib/select2/select2.js"></script>
 	<script type="text/javascript" src="js/geo.js"></script>
 	<script type="text/javascript" src="js/ui.js"></script>
 
@@ -18,9 +20,11 @@
 			
 			<label for="id">Unique ID</label>
 			<input name="id" type="text"/>
+			<select name="nodes[]" multiple>
 			{{#each .}}
-				{{id}}
+				<option value="{{id}}">{{id}}</option>
 			{{/each}}
+			</select>				
 			<input type="submit" value="Add Node"/>
 		</form>
 	</script>

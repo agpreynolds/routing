@@ -10,11 +10,18 @@ $(function(){
                 id : 'nodeOverlay',
                 content : nodeTemplate(geo.nodes),
                 callback : function(container) {
+                    $('select').select2();
                     $('form[name="node"]').bind('submit',function(e){
                         e.preventDefault();
                         var id = $(this.elements.id).val();
                         if (id && !geo.nodes[id]) {
                             geo.nodes[id] = new geo.node(id,coords);
+
+                            var nodes = $(this.elements["nodes[]"]).val();
+                            $(nodes).each(function(){
+                                new geo.arc(geo.nodes[id],geo.nodes[this]);
+                            })
+
                             container.remove();
                         }
                         else {
