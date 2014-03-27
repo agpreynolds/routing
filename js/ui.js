@@ -99,6 +99,7 @@ function relMouseCoords(canvas,event){
 }
 
 var calculateRoute = function() {
+    var journeyTemplate = Handlebars.compile($('#journeyTemplate').html());
     var matrix = floydWarshall();
-    console.log(matrix[startNode][endNode]);
+    $('#journey').html(journeyTemplate(matrix[startNode][endNode]));    
 }

@@ -52,6 +52,10 @@
 			<input type="submit" value="Add Hazard"/>
 		</form>
 	</script>
+	<script id="journeyTemplate" type="text/x-handlebars-template">
+		<p>Shortest Distance: {{distance}}</p>
+		<p>{{#each nodes}} {{this}} {{/each}}</p>
+	</script>
 </head>
 <body>
 	<header>Webres Routing Demonstration</header>
@@ -60,6 +64,8 @@
 		<button id="node">Add Node</button>
 		<button id="hazard">Add Hazard</button>
 	</nav>
+
+	<div id="journey"></div>
 
 	<canvas id="mycanvas" height="600px" width="1200px">
 		

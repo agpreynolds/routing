@@ -2,9 +2,7 @@ var floydWarshall = function() {
 	var distance = function(start,end) {
 		//Lets assume they are not linked
 		var distance = Number.POSITIVE_INFINITY;
-		//We always get the start node
-		var nodes = [ start ];
-		
+				
 		//Distance between the same point is zero always
 		if (start == end) {
 			distance = 0;
@@ -14,14 +12,13 @@ var floydWarshall = function() {
 			if ( ( this.startNode.id == start || this.startNode.id == end )
 				&& (this.endNode.id == end || this.endNode.id == start ) ) 
 			{
-				nodes.push(end); 
 				distance = this.distance;
 			}
 		});
 		
 		return {
 			distance : distance,
-			nodes : nodes
+			nodes : [start,end]
 		};
 	}
 
@@ -36,12 +33,27 @@ var floydWarshall = function() {
 	for (var p in geo.nodes) {
 		for (var q in geo.nodes){
 			for (var r in geo.nodes) {
+				//If this path has a shorter distance we want to use it
 				if (Matrix[q][r].distance > Matrix[q][p].distance + Matrix[p][r].distance) {
 					Matrix[q][r].distance = Matrix[q][p].distance + Matrix[p][r].distance;
-					Matrix[q][r].nodes.push(p,r);
+					
+					//Yucky hack - please explain
+					$.merge(Matrix[q][r].nodes,Matrix[q][p].nodes);
+					Matrix[q][r].nodes = unique(Matrix[q][r].nodes);
 				}				
 			}
 		}
 	}
 	return Matrix;		
 };
+
+/*
+	*http://stackoverflow.com/questions/12551635/jquery-remove-duplicates-from-an-array-of-strings
+*/
+function unique(list) {
+  var result = [];
+  $.each(list, function(i, e) {
+    if ($.inArray(e, result) == -1) result.push(e);
+  });
+  return result;
+}
