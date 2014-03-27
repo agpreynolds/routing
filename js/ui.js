@@ -60,9 +60,10 @@ $(function(){
                         var id = $(this.elements.id).val();
                         var radius = $(this.elements.radius).val();
                         var increments = $(this.elements.increments).val();
+                        var weighting = $(this.elements.weighting).val();
                         var degradation = $(this.elements.degradation).val();
-                        if (id && !geo.hazards[id]) {
-                            geo.hazards[id] = new geo.hazard(id,coords,radius,increments,degradation);
+                        if (id) {
+                            geo.hazards.push( new geo.hazard(id,coords,radius,increments,weighting,degradation) );
                             container.remove();
                         }
                         else {

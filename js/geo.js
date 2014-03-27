@@ -5,25 +5,11 @@ $(function() {
 		geo.canvas = $('#mycanvas')[0];
 		geo.context = geo.canvas.getContext('2d');
 
-		geo.hazards = [
-			// new geo.hazard('Rain',{x:100,y:100},100,2,2,0.2),
-			// new geo.hazard('Desert',{x:300,y:240},50,3,5,0.5),
-			// new geo.hazard('Forest',{x:100,y:300},50,1,5,0.5)
-		];
+		geo.hazards = [];
 		
-		geo.nodes = {
-			// A : new geo.node('A',{x:5,y:5}),
-			// B : new geo.node('B',{x:120,y:300}),
-			// C : new geo.node('C',{x:300,y:120}),
-			// D : new geo.node('D',{x:490,y:490})
-		};
+		geo.nodes = {};
 
-		geo.arcs = [
-			// new geo.arc(geo.nodes.A,geo.nodes.B),
-			// new geo.arc(geo.nodes.B,geo.nodes.C),
-			// new geo.arc(geo.nodes.A,geo.nodes.C),
-			// new geo.arc(geo.nodes.C,geo.nodes.D)
-		];
+		geo.arcs = [];
 	};
 
 	/*
@@ -74,7 +60,7 @@ $(function() {
 		self.calculateHazards = function() {
 			var path = this;
 			$(this.hazards).each(function(){
-				var intersect = new geo.intersection(this.intersection.start,this.intersection.end);
+				var intersect = new geo.intersection(this.intersection.start,this.intersection.end,'#cc0000');
 				//If more than 1 increment things get tricky
 				if (this.hazard.increments > 1) {
 					var totalInnerDistance = 0;
@@ -82,7 +68,7 @@ $(function() {
 						var innerIntersect;
 						if ( innerIntersect = this.checkIntersection(path) ) {
 							//Get the intersect for this segment
-							innerIntersect = new geo.intersection(innerIntersect.start,innerIntersect.end);
+							innerIntersect = new geo.intersection(innerIntersect.start,innerIntersect.end,'#cc0000');
 							
 							//The distance of the entire segment
 							var innerDistance = innerIntersect.line.distance;
@@ -109,8 +95,8 @@ $(function() {
 		}
 		self.startNode = start;
 		self.endNode = end;
-		self.getHazards();
 		self.draw();
+		self.getHazards();
 		return self;
 	};
 
@@ -124,7 +110,7 @@ $(function() {
 			y : integer
 		}
 	*/
-	geo.line = function(start,end) {
+	geo.line = function(start,end,colour) {
 		this.hazards = [];
 		this.start = start;
 		this.end = end;
@@ -304,7 +290,7 @@ $(function() {
 				geo.context.stroke();
 			}
 		}
-		// this.draw();
+		this.draw();
 	};
 
 	/*
@@ -317,8 +303,9 @@ $(function() {
 			y : integer
 		}
 	*/
-	geo.intersection = function(start,end) {		
-		this.line = new geo.line(start,end);
+	geo.intersection = function(start,end,colour) {		
+		this.line = new geo.line(start,end,colour);
+		this.line.draw();
 		this.showMarkers = function() {
 			new geo.circle(start,5,'#cc0000'),
 			new geo.circle(end,5,'#cc0000')
