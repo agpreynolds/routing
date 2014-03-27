@@ -1,6 +1,9 @@
-body {
+body, html {
 	font-family:arial;
 	font-size:14px;
+	height: 100%;
+	width: 100%;
+	overflow: hidden;
 }
 
 header {
@@ -21,4 +24,15 @@ a:hover {
 
 canvas {
 	border:solid 1px #000;
+	display: block;
+	margin: auto;
+}
+
+label {
+	display: block;
+}
+
+div.select2-container {
+	display: block;
+	width: 20ex;
 }

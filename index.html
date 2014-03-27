@@ -21,16 +21,19 @@
 			
 			<label for="id">Unique ID</label>
 			<input name="id" type="text"/>
+			
+			<label>Connected nodes</label>
 			<select name="nodes[]" multiple>
 			{{#each .}}
 				<option value="{{id}}">{{id}}</option>
 			{{/each}}
-			</select>				
+			</select>
 			<input type="submit" value="Add Node"/>
 		</form>
 	</script>
 	<script id="hazardTemplate" type="text/x-handlebars-template">
 		<header>Create New Hazard</header>
+		<a class="close-link">Close</a>
 		<form name="hazard">
 			<ul id="errors"></ul>
 
@@ -39,7 +42,11 @@
 
 			<label for="radius">Radius</label>
 			<input name="radius" type="number"/>
+			
+			<label for="increments">Increments</label>
 			<input name="increments" type="number"/>
+			
+			<label for="degradation">Degredation</label>
 			<input name="degradation" type="number"/>
 			
 			<input type="submit" value="Add Hazard"/>
@@ -50,11 +57,11 @@
 	<header>Webres Routing Demonstration</header>
 	
 	<nav>
-		<a id="node">Add Node</a>
-		<a id="hazard">Add Hazard</a>
+		<button id="node">Add Node</button>
+		<button id="hazard">Add Hazard</button>
 	</nav>
 
-	<canvas id="mycanvas" height="500" width="500">
+	<canvas id="mycanvas" height="600px" width="1200px">
 		
 	</canvas>
 
