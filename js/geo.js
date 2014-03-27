@@ -6,23 +6,23 @@ $(function() {
 		geo.context = geo.canvas.getContext('2d');
 
 		geo.hazards = [
-			new geo.hazard('Rain',{x:100,y:100},100,2,2,0.2),
-			new geo.hazard('Desert',{x:300,y:240},50,3,5,0.5),
-			new geo.hazard('Forest',{x:100,y:300},50,1,5,0.5)
+			// new geo.hazard('Rain',{x:100,y:100},100,2,2,0.2),
+			// new geo.hazard('Desert',{x:300,y:240},50,3,5,0.5),
+			// new geo.hazard('Forest',{x:100,y:300},50,1,5,0.5)
 		];
 		
 		geo.nodes = {
-			A : new geo.node('A',{x:5,y:5}),
-			B : new geo.node('B',{x:120,y:300}),
-			C : new geo.node('C',{x:300,y:120}),
-			D : new geo.node('D',{x:490,y:490})
+			// A : new geo.node('A',{x:5,y:5}),
+			// B : new geo.node('B',{x:120,y:300}),
+			// C : new geo.node('C',{x:300,y:120}),
+			// D : new geo.node('D',{x:490,y:490})
 		};
 
 		geo.arcs = [
-			new geo.arc(geo.nodes.A,geo.nodes.B),
-			new geo.arc(geo.nodes.B,geo.nodes.C),
-			new geo.arc(geo.nodes.A,geo.nodes.C),
-			new geo.arc(geo.nodes.C,geo.nodes.D)
+			// new geo.arc(geo.nodes.A,geo.nodes.B),
+			// new geo.arc(geo.nodes.B,geo.nodes.C),
+			// new geo.arc(geo.nodes.A,geo.nodes.C),
+			// new geo.arc(geo.nodes.C,geo.nodes.D)
 		];
 	};
 
@@ -40,6 +40,8 @@ $(function() {
 		this.arcs = [];
 		this.successors = [];
 		this.predecessors = [];
+
+		this.marker.draw();
 	};
 	
 	/*
@@ -302,7 +304,7 @@ $(function() {
 				geo.context.stroke();
 			}
 		}
-		this.draw();
+		// this.draw();
 	};
 
 	/*

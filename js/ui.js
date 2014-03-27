@@ -1,3 +1,4 @@
+var startNode, endNode;
 $(function(){
     var nodeTemplate = Handlebars.compile($('#nodeTemplate').html());
     var hazardTemplate = Handlebars.compile($('#hazardTemplate').html());
@@ -16,13 +17,27 @@ $(function(){
                         var id = $(this.elements.id).val();
                         if (id && !geo.nodes[id]) {
                             geo.nodes[id] = new geo.node(id,coords);
+                            
+                            //Set the start node if not already
+                            if (!startNode) {
+                                startNode = id;
+                            }
+                            //Otherwise this must be the endnode
+                            //Will be overwritten each time
+                            else {
+                                endNode = id;
+                            }
 
                             var nodes = $(this.elements["nodes[]"]).val();
                             $(nodes).each(function(){
-                                new geo.arc(geo.nodes[id],geo.nodes[this]);
+                                geo.arcs.push( new geo.arc(geo.nodes[id],geo.nodes[this]) );
                             })
 
                             container.remove();
+
+                            if (startNode && endNode) {
+                                calculateRoute();
+                            }
                         }
                         else {
                             $('#errors').append($('<li>').addClass('error').html('Please enter a unique ID'));
@@ -81,4 +96,9 @@ function relMouseCoords(canvas,event){
     canvasY = height - ( event.pageY - totalOffsetY );
 
     return {x:canvasX, y:canvasY}
+}
+
+var calculateRoute = function() {
+    var matrix = floydWarshall();
+    console.log(matrix[startNode][endNode]);
 }
