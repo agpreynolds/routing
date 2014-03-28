@@ -65,6 +65,7 @@ $(function(){
                         if (id) {
                             geo.hazards.push( new geo.hazard(id,coords,radius,increments,weighting,degradation) );
                             container.remove();
+                            geo.redraw();
                         }
                         else {
                             $('#errors').append($('<li>').addClass('error').html('Please enter a unique ID'));

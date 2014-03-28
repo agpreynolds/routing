@@ -12,6 +12,22 @@ $(function() {
 		geo.arcs = [];
 	};
 
+	geo.redraw = function() {
+		geo.context.clearRect(0,0,geo.canvas.width,geo.canvas.height);
+		for (var i in geo.nodes) {
+			this.nodes[i].marker.draw();
+		}
+		$(geo.hazards).each(function(){
+			this.draw();
+		});
+		$(geo.arcs).each(function(){
+			this.draw();
+			//Make method of arc
+			this.distance = Math.sqrt( Math.pow(this.end.x - this.start.x,2) + Math.pow(this.end.y - this.start.y,2) );
+			this.getHazards();
+		})
+	}
+
 	/*
 		@param id - String
 		@param coords - Object {
@@ -162,6 +178,12 @@ $(function() {
 		for (var i=1; i<=increments; i++) {
 			this.segments.push(new geo.zone(center,radius/increments*i,weighting));
 			weighting = weighting * degradation;
+		}
+		this.draw = function() {
+			this.circle.draw();
+			$(this.segments).each(function(){
+				this.draw();
+			})
 		}
 	};
 
