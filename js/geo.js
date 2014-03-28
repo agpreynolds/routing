@@ -273,30 +273,55 @@ $(function() {
 
 				//Hmm have to do something incase the path starts / terminates within hazard
 				//TODO: Refine code
+				//Horrid nested structure - this just has to work
 				var start,end;
 				//If point is on the line - use the point
 				if ( between(x1,path.start.x,path.end.x) ) {
 					start = {x:x1,y:y1};
+					//Both are true - we have our point Yippee ki-yay, motherfucker!
+					//Right calm down, return object
+					if ( between(x2,path.start.x,path.end.x) ) {
+						end = {x:x2,y:y2};
+						return {start:start,end:end};
+					}
+					//Ahh shit only one point of intersection
+					//Need to figure out which ones in the circle
+					//Who put a node in a hazard - must be mental
+					else {
+						//Fuck it use pythagoras
+						//If the nodes distance from center of circle is less than radius is must be in the circle right???
+						//Ahh well demoing in 1 hour this has to work
+						var distFromCenter = Math.sqrt( Math.pow(path.start.x - this.center.x,2) + Math.pow(path.start.y - this.center.y,2) );
+						if ( distFromCenter < this.radius ) {
+							end = {x:path.start.x,y:path.start.y};
+						}
+						//Otherwise the opposite must be true??
+						else {
+							end = {x:path.end.x,y:path.end.y};
+						}
+					}
 				}
-				//Otherwise - if x coord is less than starting coord and gradient is positive use start coord
-				else if ( x1 < path.start.x && path.gradient > 0 ) {
-					start = {x:path.start.x,y:path.start.y};
-				}
-				else {
-					start = {x:path.end.x,y:path.end.y};
-				}
-
-				if ( between(x2,path.start.x,path.end.x) ) {
+				//Otherwise we may be in the hazard, check second point in range
+				else if ( between(x2,path.start.x,path.end.x) ) {
 					end = {x:x2,y:y2};
-				}
-				else if ( x2 > path.end.x && path.gradient > 0 ) {
-					end = {x:path.end.x,y:path.end.y};
+					//Fuck it use pythagoras
+					//If the nodes distance from center of circle is less than radius is must be in the circle right???
+					//Ahh well demoing in 1 hour this has to work
+					var distFromCenter = Math.sqrt( Math.pow(path.start.x - this.center.x,2) + Math.pow(path.start.y - this.center.y,2) );
+					if ( distFromCenter < this.radius ) {
+						start = {x:path.start.x,y:path.start.y};
+					}
+					//Otherwise the opposite must be true??
+					else {
+						start = {x:path.end.x,y:path.end.y};
+					}
 				}
 				else {
-					end = {x:path.start.x,y:path.start.y};	
+					//If neither point is correct the line can't reach the circle
+					return 0;
 				}
-				
-				return {start:start,end:end};
+				//Return if we haven't already
+				return {start:start,end:end};			
 			}
 			return 0;
 		}
